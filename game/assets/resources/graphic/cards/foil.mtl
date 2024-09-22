@@ -80,6 +80,10 @@
       "normalMap": {
         "__uuid__": "6b272fdd-a0e7-4583-a3c1-8c5ec877b394@6c48a",
         "__expectedType__": "cc.Texture2D"
+      },
+      "pbrMap": {
+        "__uuid__": "b5e1723a-a35f-40b3-aab7-d9e062ad786b@6c48a",
+        "__expectedType__": "cc.Texture2D"
       }
     },
     {},

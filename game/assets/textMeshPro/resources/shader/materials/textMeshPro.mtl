@@ -2,6 +2,7 @@
   "__type__": "cc.Material",
   "_name": "",
   "_objFlags": 0,
+  "__editorExtras__": {},
   "_native": "",
   "_effectAsset": {
     "__uuid__": "04dbf90a-085c-4507-8f35-2ec5ba5d35bb",
@@ -20,7 +21,9 @@
   ],
   "_states": [
     {
-      "rasterizerState": {},
+      "rasterizerState": {
+        "cullMode": 2
+      },
       "depthStencilState": {},
       "blendState": {
         "targets": [

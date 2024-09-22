@@ -11,8 +11,7 @@
   "_techIdx": 1,
   "_defines": [
     {
-      "USE_ALBEDO_MAP": true,
-      "USE_PBR_MAP": true
+      "USE_ALBEDO_MAP": true
     },
     {},
     {},
@@ -21,9 +20,7 @@
   ],
   "_states": [
     {
-      "rasterizerState": {
-        "cullMode": 1
-      },
+      "rasterizerState": {},
       "depthStencilState": {},
       "blendState": {
         "targets": [
@@ -32,10 +29,7 @@
       }
     },
     {
-      "rasterizerState": {
-        "cullMode": 1,
-        "isFrontFaceCCW": false
-      },
+      "rasterizerState": {},
       "depthStencilState": {},
       "blendState": {
         "targets": [
@@ -44,9 +38,7 @@
       }
     },
     {
-      "rasterizerState": {
-        "cullMode": 2
-      },
+      "rasterizerState": {},
       "depthStencilState": {},
       "blendState": {
         "targets": [
@@ -75,18 +67,24 @@
   ],
   "_props": [
     {
-      "roughness": 0,
-      "metallic": 0.5,
+      "occlusion": 0.687,
+      "roughness": 1,
+      "metallic": 0.307,
+      "specularIntensity": 0.441,
       "mainTexture": {
-        "__uuid__": "6672c7f7-bb49-4012-a531-06d6c598ad3a@6c48a",
+        "__uuid__": "fb627175-6bad-4ad7-b654-7b58dcb7db51@6c48a",
         "__expectedType__": "cc.Texture2D"
       },
       "normalMap": {
-        "__uuid__": "6672c7f7-bb49-4012-a531-06d6c598ad3a@6c48a",
+        "__uuid__": "ac9d6dd3-0d26-4a4d-a10c-8d4224a601f1@6c48a",
         "__expectedType__": "cc.Texture2D"
       },
-      "pbrMap": {
-        "__uuid__": "6672c7f7-bb49-4012-a531-06d6c598ad3a@6c48a",
+      "occlusionMap": {
+        "__uuid__": "ac9d6dd3-0d26-4a4d-a10c-8d4224a601f1@6c48a",
+        "__expectedType__": "cc.Texture2D"
+      },
+      "emissiveMap": {
+        "__uuid__": "ac9d6dd3-0d26-4a4d-a10c-8d4224a601f1@6c48a",
         "__expectedType__": "cc.Texture2D"
       }
     },
