@@ -1,4 +1,7 @@
+import { exit } from 'process';
+
 import { mongo } from 'models';
+import { getLastCrawlDate, updateCrawlDate } from 'models/crawl';
 import type { IGameDuel } from 'models/game';
 import { GameDuel } from 'models/game';
 import type { IUser } from 'models/user';
@@ -37,6 +40,8 @@ const getUserGameStats = async (user: IUser, duels: IGameDuel[]) => {
 	const isoDates = userDuels.map((curr) => curr.createdAt.toISOString());
 	return [
 		user.id,
+		user.email,
+		user.address,
 		wins + loses,
 		wins,
 		loses,
@@ -98,8 +103,8 @@ const getSystemStatsAggregator = async (
 export const handler = async (event) => {
 	logger.info('Cron job running...', event);
 
-	const beginDate = new Date(2024, 9, 1);
-	const newSheetName = new Date().toISOString().split('T')[0];
+	const beginDate = await getLastCrawlDate();
+	const newTabName = new Date().toISOString().split('T')[0];
 	const spreadsheetId = process.env.GCP_SHEET_SPREADSHEET_ID;
 	if (!spreadsheetId) {
 		logger.error('failed to get spreadsheet id from environment');
@@ -112,15 +117,7 @@ export const handler = async (event) => {
 		return [userType, address, val.createdAt];
 	});
 
-	const newUserTabName = 'NEW_USER_' + newSheetName;
-	const userStatsTabName = 'USER_STATS_' + newSheetName;
-	const systemStatsTabName = 'SYSTEM_STATS_' + newSheetName;
-
-	await Promise.all([
-		createGoogleSheetTab(spreadsheetId, newUserTabName),
-		createGoogleSheetTab(spreadsheetId, userStatsTabName),
-		createGoogleSheetTab(spreadsheetId, systemStatsTabName),
-	]);
+	await createGoogleSheetTab(spreadsheetId, newTabName);
 
 	const duels: IGameDuel[] = await getSystemGameDuels(beginDate);
 
@@ -139,15 +136,18 @@ export const handler = async (event) => {
 
 	// Step 4: Write data to Google Sheets
 	await Promise.all([
-		writeToGoogleSheet(spreadsheetId, newUserTabName, 'A1', [
+		writeToGoogleSheet(spreadsheetId, newTabName, 'A1', [
+			['user stats', '', '', '', '', '', ''],
+			['userId', 'email', 'address', 'total', 'wins', 'loss', 'timestamps'],
+			...usersStat,
+		]),
+		writeToGoogleSheet(spreadsheetId, newTabName, 'I1', [
+			['newUsers', '', ''],
 			['type', 'address', 'created At'],
 			...newUsersInfo,
 		]),
-		writeToGoogleSheet(spreadsheetId, userStatsTabName, 'A1', [
-			['userId', 'total', 'wins', 'loss', 'timestamps'],
-			...usersStat,
-		]),
-		writeToGoogleSheet(spreadsheetId, systemStatsTabName, 'A1', [
+		writeToGoogleSheet(spreadsheetId, newTabName, 'M1', [
+			['system stats', '', '', '', '', ''],
 			[
 				'new users',
 				'via email',
@@ -161,6 +161,7 @@ export const handler = async (event) => {
 	]);
 
 	logger.info('Data successfully written to Google Sheets!');
+	await updateCrawlDate();
 
 	return {
 		statusCode: 200,
