@@ -1,12 +1,17 @@
-import type { CommandHandler } from '../util/type';
-import { EventType } from '../util/type';
+import {
+	defaultSetting,
+	ecsv1 as cardTemplate,
+	initializeDuel,
+} from '@underrealm/game';
 
-import { fetchDuel } from './internal';
+import type { Client } from '../util/type';
 
-export const onIncomingConnect: CommandHandler = async ({ duelId, send }) => {
-	const duel = fetchDuel(duelId);
-	await send({ duel });
-	if (duel.winner) {
-		await send({ winner: duel.winner }, EventType.GameOver);
-	}
+import { setECS } from './internal';
+
+export const onIncomingConnect = async (
+	duelId: string,
+	duelClients: Array<Client>,
+) => {
+	const duel = initializeDuel(cardTemplate, defaultSetting, duelClients);
+	setECS(duelId, duel);
 };

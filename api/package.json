@@ -23,6 +23,7 @@
     "@aws-sdk/client-ssm": "^3.72.0",
     "@aws-sdk/lib-dynamodb": "^3.45.0",
     "@graphql-tools/schema": "^10.0.6",
+    "@underrealm/game": "*",
     "@underrealm/murg": "*",
     "chalk": "^5.3.0",
     "dotenv": "^16.4.5",

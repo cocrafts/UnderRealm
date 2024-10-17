@@ -14,19 +14,22 @@ export const ecs = new ECS();
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '999990000',
 		name: 'Troop',
-		class: ClassType.Knight,
-		kind: CardType.Hero,
+		class: ClassType.Beast,
+		kind: CardType.Troop,
 		rarity: 0,
 	})
 	.addComponent(ComponentType.CardAttribute, {
 		attack: 20,
 		defense: 0,
 		health: 40,
-	});
+	})
+	.addComponent(ComponentType.Template, {});
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '999980000',
 		name: 'Wolf',
 		kind: CardType.Troop,
 		class: ClassType.Beast,
@@ -36,10 +39,12 @@ ecs
 		attack: 20,
 		defense: 0,
 		health: 20,
-	});
+	})
+	.addComponent(ComponentType.Template, {});
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '999970000',
 		name: 'Snake',
 		kind: CardType.Troop,
 		class: ClassType.Beast,
@@ -49,7 +54,8 @@ ecs
 		attack: 10,
 		defense: 0,
 		health: 20,
-	});
+	})
+	.addComponent(ComponentType.Template, {});
 
 /**
  * Hero Cards
@@ -57,6 +63,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00001',
 		name: 'The Raven',
 		kind: CardType.Hero,
 		class: ClassType.Assassin,
@@ -76,6 +83,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00002',
 		name: 'The Mystic',
 		kind: CardType.Hero,
 		class: ClassType.Assassin,
@@ -92,6 +100,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00003',
 		name: 'The Shield Breaker',
 		kind: CardType.Hero,
 		class: ClassType.Assassin,
@@ -112,6 +121,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00004',
 		name: 'The Stinger',
 		kind: CardType.Hero,
 		class: ClassType.Assassin,
@@ -128,6 +138,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00005',
 		name: 'Vesu Beast',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
@@ -144,6 +155,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00006',
 		name: 'Cavalier',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
@@ -163,6 +175,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00007',
 		name: 'Fire Champion',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
@@ -192,6 +205,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00008',
 		name: 'War Chief',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
@@ -208,6 +222,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00009',
 		name: 'Marcus',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
@@ -231,6 +246,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00010',
 		name: 'Nepia',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
@@ -250,6 +266,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00011',
 		name: 'Knight Captain',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
@@ -273,6 +290,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00012',
 		name: 'Brawler',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
@@ -296,6 +314,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00013',
 		name: 'Legionnaire',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
@@ -312,6 +331,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00014',
 		name: 'Head Hunter',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
@@ -333,6 +353,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00015',
 		name: 'War Hound',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
@@ -352,6 +373,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00016',
 		name: 'Paladin',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
@@ -368,6 +390,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00017',
 		name: 'Knight of Vesu',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
@@ -382,6 +405,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00018',
 		name: 'Fire Warrior',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
@@ -406,6 +430,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00019',
 		name: 'Destroyer',
 		kind: CardType.Hero,
 		class: ClassType.Knight,
@@ -429,6 +454,7 @@ ecs
 ecs
 	.createEntity()
 	.addComponent(ComponentType.CardMetadata, {
+		id: '00020',
 		name: 'Infiltrator',
 		kind: CardType.Hero,
 		class: ClassType.Tanker,

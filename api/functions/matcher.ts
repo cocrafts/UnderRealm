@@ -1,5 +1,7 @@
+import { defaultSetting, ecsv1, initializeDuel } from '@underrealm/game';
 import { makeDuel } from 'game/duel';
 import { GameDuel } from 'models/game';
+import { GameDuelV2 } from 'models/gameV2';
 import { logger } from 'utils/logger';
 import { pubsub } from 'utils/pubsub';
 import { redis } from 'utils/redis';
@@ -29,6 +31,7 @@ export const handler = async () => {
 		}
 
 		matchPromises.push(initializeGameMatch(pendingFindingKey, key));
+		matchPromises.push(initializeGameMatchV2(pendingFindingKey, key));
 
 		pendingFindingKey = null;
 	}
@@ -63,6 +66,39 @@ const initializeGameMatch = async (
 
 	const { config, history } = makeDuel('00001', firstPlayerId, secondPlayerId);
 	const duel = await GameDuel.create({ config, history });
+
+	await Promise.all([
+		pubsub.publish(firstTopic, { findMatch: { id: duel.id } }),
+		pubsub.publish(secondTopic, { findMatch: { id: duel.id } }),
+	]);
+};
+
+const initializeGameMatchV2 = async (
+	firstFindingKey: string,
+	secondFindingKey: string,
+) => {
+	const [firstTopic, secondTopic] = await Promise.all([
+		redis.GETDEL(firstFindingKey),
+		redis.GETDEL(secondFindingKey),
+	]);
+
+	if (!firstTopic) {
+		logger.warn(`Not found pubsub topic of: ${firstFindingKey}`);
+		return;
+	}
+	if (!secondTopic) {
+		logger.warn(`Not found pubsub topic of: ${secondFindingKey}`);
+		return;
+	}
+
+	const firstPlayerId = firstFindingKey.split('#')[1];
+	const secondPlayerId = secondFindingKey.split('#')[1];
+
+	const duelECS = initializeDuel(ecsv1, defaultSetting, [
+		{ id: firstPlayerId },
+		{ id: secondPlayerId },
+	]);
+	const duel = await GameDuelV2.create({ ecs: duelECS.toJSON() });
 
 	await Promise.all([
 		pubsub.publish(firstTopic, { findMatch: { id: duel.id } }),

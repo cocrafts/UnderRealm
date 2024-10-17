@@ -1,10 +1,14 @@
 import type { Component } from '../ecs';
 
 import type {
+	ActivationType,
 	CardPlace as CardPlaceType,
 	CardType,
 	ClassType,
+	CommandType,
 	ComponentType,
+	DuelPhase,
+	ElementalType,
 	InspireSource,
 } from './types';
 
@@ -22,11 +26,17 @@ export type ComponentMap = {
 	[ComponentType.CardChargeable]: CardChargeable;
 	[ComponentType.CardOwnership]: Ownership;
 	[ComponentType.CardPlace]: CardPlace;
+	[ComponentType.Variant]: Variant;
+	[ComponentType.Template]: Template;
+	[ComponentType.CardFightAttribute]: CardAttribute;
+	[ComponentType.CardBuffAttribute]: CardAttribute;
+	[ComponentType.CardDebuffAttribute]: CardAttribute;
 
 	[ComponentType.SummonActivation]: SummonActivation;
 	[ComponentType.PassiveActivation]: PassiveActivation;
 	[ComponentType.FightActivation]: FightActivation;
 	[ComponentType.PreFightActivation]: PreFightActivation;
+	[ComponentType.PostFightActivation]: PostFightActivation;
 	[ComponentType.ChargeActivation]: ChargeActivation;
 	[ComponentType.InspireActivation]: InspireActivation;
 	[ComponentType.GloryActivation]: GloryActivation;
@@ -48,12 +58,18 @@ export type ComponentMap = {
 	[ComponentType.MultiplyDamageAgainst]: MultiplyDamageAgainst;
 	[ComponentType.DoubleAttack]: DoubleAttack;
 	[ComponentType.Transform]: Transform;
+
+	[ComponentType.DuelManager]: DuelManager;
+	[ComponentType.Command]: Command;
+
+	[ComponentType.Config]: Config;
 };
 
 /**
  * Player components
  */
 type PlayerAttribute = Component<ComponentType.PlayerAttribute> & {
+	id: string;
 	health: number;
 };
 
@@ -61,11 +77,19 @@ type PlayerAttribute = Component<ComponentType.PlayerAttribute> & {
  * Card components
  */
 type Metadata = Component<ComponentType.CardMetadata> & {
+	id: string;
 	name: string;
 	class: ClassType;
 	kind: CardType;
 	rarity: 0;
 };
+
+//TODO: will handle elemental in next update
+export type Variant = Component<ComponentType.Variant> & {
+	element: ElementalType;
+};
+
+export type Template = Component<ComponentType.Template>;
 
 type CardClass = Component<ComponentType.CardClass> & {
 	kind: CardType;
@@ -102,6 +126,8 @@ type FightActivation = Component<ComponentType.FightActivation>;
 
 type PreFightActivation = Component<ComponentType.PreFightActivation>;
 
+type PostFightActivation = Component<ComponentType.PostFightActivation>;
+
 type ChargeActivation = Component<ComponentType.ChargeActivation> & {
 	current: number;
 	threshold: number;
@@ -113,7 +139,9 @@ type InspireActivation = Component<ComponentType.InspireActivation> & {
 
 type GloryActivation = Component<ComponentType.GloryActivation>;
 
-type SkillActivating = Component<ComponentType.SkillActivating>;
+type SkillActivating = Component<ComponentType.SkillActivating> & {
+	activationType?: ActivationType;
+};
 
 type DestroyFacingMinHealth =
 	Component<ComponentType.DestroyFacingMinHealth> & {
@@ -189,3 +217,36 @@ type MultiplyDamageAgainst = Component<ComponentType.MultiplyDamageAgainst> & {
 type DoubleAttack = Component<ComponentType.DoubleAttack>;
 
 type Transform = Component<ComponentType.Transform>;
+
+/**
+ * Duel components
+ */
+type DuelManager = Component<ComponentType.DuelManager> & {
+	phase: DuelPhase;
+	turnOf: string;
+};
+
+type Command = Component<ComponentType.Command> & {
+	index: number;
+	commandType: CommandType;
+	from?: CardPlace;
+	to?: CardPlace;
+};
+
+/**
+ * Config components
+ */
+export type Config = Component<ComponentType.Config> & {
+	initialCardCount: number;
+	initialPlayerHealth: number;
+	elementalFactor: number;
+	handSize: number;
+	groundSize: number;
+	maxDeckSize: number;
+	maxAttachment: number;
+	spellIncreaseCycle: number;
+	perTurnDraw: number;
+	perTurnHero: number;
+	perTurnSpell: number;
+	perTurnTroop: number;
+};

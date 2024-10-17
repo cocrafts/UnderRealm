@@ -1,10 +1,9 @@
 import { activation, resetAllSkillActivatingSystem, skill } from '../systems';
 
-import { duelECS } from './duel';
 import { ecs } from './v1';
 
+export * from './duel';
 export const ecsv1 = ecs.toJSON();
-export const duel = duelECS.toJSON();
 
 /**
  * There are two approaches of registering system:

@@ -48,3 +48,8 @@ export interface DuelRecord {
 	config: DuelConfig;
 	history: DuelCommandBundle[];
 }
+
+export interface Client {
+	id: string;
+	ws: unknown;
+}

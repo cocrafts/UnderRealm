@@ -8,7 +8,8 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "lint": "eslint . --ext .ts,.tsx",
-    "lint:fix": "eslint . --ext .ts,.tsx --fix"
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "test": "jest"
   },
   "version": "0.0.1",
   "creator": {
@@ -19,7 +20,26 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@types/jest": "^28.1.1",
     "@types/lodash": "^4.14.191",
-    "eslint": "^8.57.0"
+    "eslint": "^8.57.0",
+    "jest": "^28.1.1"
+  },
+  "jest": {
+    "testMatch": [
+      "**/*.test.ts"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.js"
+    ],
+    "moduleNameMapper": {
+      "^core/(.*)$": "<rootDir>/assets/scripts/core/$1"
+    }
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-typescript"
+    ]
   }
 }

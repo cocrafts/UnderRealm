@@ -15,7 +15,10 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": [
+        "jest"
+    ]
   },
   "exclude": ["extensions", "assets/textMeshPro"]
 }
