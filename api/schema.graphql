@@ -8,6 +8,7 @@ type Query {
   cardDuel(id: String!): CardDuel
   quests(status: QuestStatus): [Quest]
   referralHistory: [ReferralHistory]
+  nonce: String
 }
 
 type Mutation {

@@ -8,7 +8,7 @@ import type {
 import { configs } from 'utils/config';
 
 import type { ApiContext } from './graphql';
-import { resolveUniversalContext } from './graphql';
+import { resolveAuthContext } from './graphql';
 
 type LambdaIntegrationContext = LambdaContextFunctionArgument<
 	handlers.RequestHandler<
@@ -28,7 +28,7 @@ export const graphqlContext: ContextFunction<
 > = async ({ event }) => {
 	const authHeader = event.headers['authorization'];
 
-	const context = await resolveUniversalContext({
+	const context = await resolveAuthContext({
 		authHeader,
 	});
 

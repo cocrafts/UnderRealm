@@ -1,3 +1,4 @@
+import { checkRequestNonce } from 'models/nonce';
 import type { IUser } from 'models/user';
 import { User } from 'models/user';
 import { ForbiddenError } from 'utils/errors';
@@ -11,19 +12,34 @@ export type WebsocketContext = {
 	connectionId?: string;
 };
 
+export type AuthContext = {
+	auth?: string;
+};
 export type UserContext = {
 	user?: UserProfile;
 };
 
-export type ApiContext = WebsocketContext & UserContext;
+export type NonceContext = {
+	nonce?: string;
+};
 
-type ContextOptions = {
+type NonceContextOptions = {
+	nonce: string;
+	user: UserProfile;
+};
+
+export type ApiContext = WebsocketContext &
+	UserContext &
+	NonceContext &
+	AuthContext;
+
+type AuthContextOptions = {
 	authHeader?: string;
 };
 
-export const resolveUniversalContext = async ({
+export const resolveAuthContext = async ({
 	authHeader,
-}: ContextOptions) => {
+}: AuthContextOptions) => {
 	let user: IUser;
 	if (authHeader) {
 		const token = authHeader.replace('Bearer ', '');
@@ -42,19 +58,57 @@ export const resolveUniversalContext = async ({
 	return { user };
 };
 
-export const requireAuth = <TResult, TParent, TArgs>(
-	resolver: ResolverFn<
-		TResult,
-		TParent,
-		Required<UserContext> & WebsocketContext,
-		TArgs
-	>,
+export const resolveNonceContext = async ({
+	nonce,
+	user,
+}: NonceContextOptions) => {
+	return await checkRequestNonce(user, nonce);
+};
+
+export const requireUser = <TResult, TParent, TArgs>(
+	resolver: ResolverFn<TResult, TParent, ApiContext, TArgs>,
 ): ResolverFn<TResult, TParent, ApiContext, TArgs> => {
-	return (root, parent, context, args) => {
-		if (!context.user) {
+	return async (root, parent, context, args) => {
+		if (!context.auth) {
 			throw new ForbiddenError('Require Authorization token');
 		}
 
-		return resolver(root, parent, { ...context, user: context.user }, args);
+		if (context.user) {
+			return resolver(root, parent, context, args);
+		}
+
+		const { user } = await resolveAuthContext({
+			authHeader: context.auth,
+		});
+
+		if (!user) {
+			throw new ForbiddenError('Failed to get user information');
+		}
+		return resolver(root, parent, { ...context, user: user }, args);
+	};
+};
+
+export const requireNonce = <TResult, TParent, TArgs>(
+	resolver: ResolverFn<TResult, TParent, ApiContext, TArgs>,
+): ResolverFn<TResult, TParent, ApiContext, TArgs> => {
+	return async (root, parent, context, args) => {
+		const user = context.user;
+		if (!user) {
+			throw new ForbiddenError('Require User');
+		}
+		if (!context.nonce) {
+			throw new ForbiddenError('Nonce is required');
+		}
+
+		const nonceCheckResult = await resolveNonceContext({
+			nonce: context.nonce,
+			user: user,
+		});
+
+		if (!nonceCheckResult) {
+			throw new ForbiddenError('invalid Nonce');
+		}
+
+		return resolver(root, parent, context, args);
 	};
 };

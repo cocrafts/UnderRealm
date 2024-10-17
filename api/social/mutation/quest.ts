@@ -1,10 +1,10 @@
 import { Quest, QuestAction } from 'models/quest';
 import { User } from 'models/user';
-import { requireAuth } from 'utils/context';
+import { requiredChain, requireUser } from 'utils/context';
 import type { MutationResolvers } from 'utils/types';
 
 export const createQuestAction: MutationResolvers['createQuestAction'] =
-	requireAuth(async (_, { questId }, { user }) => {
+	requiredChain([requireUser], async (_, { questId }, { user }) => {
 		try {
 			const userId = user.id;
 			const quest = await Quest.findById(questId);

@@ -110,6 +110,7 @@ type Query {
   cardDuelHistory(limit: Int): [CardDuelHistory]
   cardDuelPlaying: CardDuelHistory
   greeting: String
+  nonce: String
   profile(address: String): Profile
   quests(status: QuestStatus): [Quest]
   referralHistory: [ReferralHistory]

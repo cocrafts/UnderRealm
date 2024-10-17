@@ -157,6 +157,7 @@ export type Query = {
   cardDuelHistory?: Maybe<Array<Maybe<CardDuelHistory>>>;
   cardDuelPlaying?: Maybe<CardDuelHistory>;
   greeting?: Maybe<Scalars['String']['output']>;
+  nonce?: Maybe<Scalars['String']['output']>;
   profile?: Maybe<Profile>;
   quests?: Maybe<Array<Maybe<Quest>>>;
   referralHistory?: Maybe<Array<Maybe<ReferralHistory>>>;
