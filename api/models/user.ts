@@ -16,6 +16,8 @@ export type IUser = {
 	avatarUrl?: string;
 	referralCode: string;
 	points: number;
+	winMatches: number;
+	totalMatches: number;
 	discordId?: string;
 	twitterId?: string;
 	telegramId?: string;
@@ -50,6 +52,16 @@ const UserSchema = createSchema({
 		type: String,
 		index: true,
 	},
+	winMatches: {
+		type: Number,
+		min: 0,
+		default: 0,
+	},
+	totalMatches: {
+		type: Number,
+		min: 0,
+		default: 0,
+	},
 	avatarUrl: String,
 	discordId: {
 		type: String,
@@ -77,3 +89,19 @@ UserSchema.pre('save', function (next) {
 });
 
 export const User = model<IUser>('User', UserSchema);
+
+export async function updateWinner(userId: string, stakingPoints: number) {
+	return User.findByIdAndUpdate(
+		userId,
+		{ $inc: { points: stakingPoints, winMatches: 1, totalMatches: 1 } },
+		{ new: true },
+	);
+}
+
+export async function updateLoser(userId: string) {
+	return User.findByIdAndUpdate(
+		userId,
+		{ $inc: { totalMatches: 1 } },
+		{ new: true },
+	);
+}

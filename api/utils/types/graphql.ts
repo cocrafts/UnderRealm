@@ -147,6 +147,8 @@ export type Profile = {
   points: Scalars['Int']['output'];
   referralCode: Scalars['String']['output'];
   referred?: Maybe<ReferralHistory>;
+  totalMatches?: Maybe<Scalars['Int']['output']>;
+  winMatches?: Maybe<Scalars['Int']['output']>;
   telegramId?: Maybe<Scalars['String']['output']>;
   twitterId?: Maybe<Scalars['String']['output']>;
 };
@@ -229,6 +231,12 @@ export type ReferralHistory = {
   referrerId?: Maybe<Scalars['String']['output']>;
 };
 
+export enum StakingPackage {
+  U_10 = 'U_10',
+  U_50 = 'U_50',
+  U_100 = 'U_100'
+}
+
 export type Subscription = {
   __typename?: 'Subscription';
   counterIncreased: Scalars['Int']['output'];
@@ -237,6 +245,7 @@ export type Subscription = {
 
 
 export type SubscriptionFindMatchArgs = {
+  staking?: InputMaybe<StakingPackage>;
   userId: Scalars['String']['input'];
 };
 
@@ -336,6 +345,7 @@ export type ResolversTypes = ResolversObject<{
   QuestStatus: QuestStatus;
   QuestType: QuestType;
   ReferralHistory: ResolverTypeWrapper<ReferralHistory>;
+  StakingPackage: StakingPackage;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
 }>;
@@ -479,6 +489,8 @@ export type ProfileResolvers<ContextType = ApiContext, ParentType extends Resolv
   points?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   referralCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   referred?: Resolver<Maybe<ResolversTypes['ReferralHistory']>, ParentType, ContextType>;
+  totalMatches?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  winMatches?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   telegramId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   twitterId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

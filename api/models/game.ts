@@ -29,6 +29,7 @@ import {
 } from '@underrealm/murg';
 import { model, Schema } from 'mongoose';
 
+import { StakingPackage } from './staking';
 import { createSchema } from './utils';
 
 export type IGameDuel = {
@@ -217,10 +218,11 @@ const GameDuelSchema = createSchema({
 
 export const GameDuel = model<IGameDuel>('GameDuel', GameDuelSchema);
 
-type IMatchFinding = {
+export type IMatchFinding = {
 	userId: string;
 	pubsubTopic: string;
 	connectionId: string;
+	stakingPackage?: StakingPackage;
 };
 
 const MatchFindingSchema = createSchema({
@@ -237,6 +239,10 @@ const MatchFindingSchema = createSchema({
 	connectionId: {
 		type: String,
 		unique: true,
+	},
+	stakingPackage: {
+		type: String,
+		enum: Object.values(StakingPackage),
 	},
 });
 
