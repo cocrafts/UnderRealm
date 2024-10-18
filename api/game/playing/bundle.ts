@@ -14,6 +14,8 @@ import {
 import type { IGameDuel } from 'models/game';
 import { GameDuel } from 'models/game';
 import { safeAddGamePoints } from 'models/points';
+import { Staking, StakingStatus } from 'models/staking';
+import { updateLoser, updateWinner } from 'models/user';
 
 import type { CommandHandler, ResponseSender } from './types';
 import { EventType } from './types';
@@ -51,12 +53,45 @@ const sendGameOver = async (
 			? duel.config.secondPlayer.id
 			: duel.config.firstPlayer.id;
 
+	/*
+	 * Check if staking record exists for the duel
+	 */
+	const staking = await Staking.findOne({ duelId: duel.id });
+	let stakingPoints = 0;
+
+	/*
+	 * Using sum of points staked by participants as reward for winner
+	 * instead of fixed amount for each package to make it easier to
+	 * add more packages or customization in the future.
+	 */
+	if (staking) {
+		stakingPoints = staking.player1.pointsStaked + staking.player2.pointsStaked;
+		/*
+		 * Update staking record with winner and status
+		 * when the game is over.
+		 */
+		await Staking.updateOne(
+			{ _id: staking.id },
+			{
+				$set: {
+					winnerId: winner,
+					status: StakingStatus.ACCEPTED,
+				},
+			},
+		);
+	}
+
 	const [winnerPoints, loserPoints] = await Promise.all([
 		safeAddGamePoints(winner, duel.id, true),
 		safeAddGamePoints(loser, duel.id, false),
+		updateWinner(winner, stakingPoints),
+		updateLoser(loser),
 	]);
 
-	await send({ winner, winnerPoints, loserPoints }, EventType.GameOver);
+	await send(
+		{ winner, winnerPoints, loserPoints, stakingPoints },
+		EventType.GameOver,
+	);
 };
 
 export const runBundles = (duel: DuelState, bundles: DuelCommandBundle[]) => {

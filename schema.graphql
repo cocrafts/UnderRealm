@@ -101,6 +101,8 @@ type Profile {
   points: Int!
   referralCode: String!
   referred: ReferralHistory
+  totalMatches: Int
+  winMatches: Int
   telegramId: String
   twitterId: String
 }
@@ -159,7 +161,13 @@ type ReferralHistory {
   referrerId: String
 }
 
+enum StakingPackage {
+  U_10
+  U_50
+  U_100
+}
+
 type Subscription {
   counterIncreased: Int!
-  findMatch(userId: String!): MatchFound
+  findMatch(staking: StakingPackage, userId: String!): MatchFound
 }

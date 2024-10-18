@@ -16,9 +16,15 @@ type Mutation {
   updateProfile(profileInput: MutateProfileInput): Profile
 }
 
+enum StakingPackage {
+  U_10
+  U_50
+  U_100
+}
+
 type Subscription {
   counterIncreased: Int!
-  findMatch(userId: String!): MatchFound
+  findMatch(userId: String!, staking: StakingPackage): MatchFound
 }
 
 type Profile {
@@ -31,6 +37,8 @@ type Profile {
   referred: ReferralHistory
   referralCode: String!
   points: Int!
+  winMatches: Int
+  totalMatches: Int
   discordId: String
   twitterId: String
   telegramId: String
